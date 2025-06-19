@@ -3,28 +3,30 @@ import { supabase } from '@/lib/supabase'
 import { categories, businessTypes } from '@/lib/constants'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const baseUrl = 'https://ihavenoidea.ai'
+  
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
     {
-      url: '/',
+      url: `${baseUrl}/`,
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 1,
     },
     {
-      url: '/about',
+      url: `${baseUrl}/about`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
-      url: '/privacy',
+      url: `${baseUrl}/privacy`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.5,
     },
     {
-      url: '/terms',
+      url: `${baseUrl}/terms`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.5,
@@ -40,7 +42,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     // Generate idea pages
     const ideaPages: MetadataRoute.Sitemap = ideas?.map(idea => ({
-      url: `/idea/${idea.id}`,
+      url: `${baseUrl}/idea/${idea.id}`,
       lastModified: new Date(idea.updated_at || new Date()),
       changeFrequency: 'weekly' as const,
       priority: 0.7,
@@ -50,7 +52,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const categoryPages: MetadataRoute.Sitemap = categories
       .filter(cat => cat !== 'All')
       .map(category => ({
-        url: `/category/${category.toLowerCase().replace(/\s+/g, '-').replace(/&/g, 'and')}`,
+        url: `${baseUrl}/category/${category.toLowerCase().replace(/\s+/g, '-').replace(/&/g, 'and')}`,
         lastModified: new Date(),
         changeFrequency: 'weekly' as const,
         priority: 0.6,
@@ -60,7 +62,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const typePages: MetadataRoute.Sitemap = businessTypes
       .filter(type => type !== 'All')
       .map(type => ({
-        url: `/type/${type.toLowerCase().replace(/\s+/g, '-')}`,
+        url: `${baseUrl}/type/${type.toLowerCase().replace(/\s+/g, '-')}`,
         lastModified: new Date(),
         changeFrequency: 'weekly' as const,
         priority: 0.6,
@@ -69,7 +71,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Generate creator pages
     const uniqueCreators = [...new Set(ideas?.map(idea => idea.sourceName) || [])]
     const creatorPages: MetadataRoute.Sitemap = uniqueCreators.map(creator => ({
-      url: `/creator/${creator.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '')}`,
+      url: `${baseUrl}/creator/${creator.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '')}`,
       lastModified: new Date(),
       changeFrequency: 'monthly' as const,
       priority: 0.5,

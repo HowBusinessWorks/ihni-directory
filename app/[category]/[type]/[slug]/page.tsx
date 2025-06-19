@@ -199,7 +199,7 @@ export default async function IdeaPage({ params }: IdeaPageProps) {
               </div>
               <div className="text-right">
                 <div className="bg-purple-400 text-black border-2 border-black px-4 py-2 font-bold text-lg mb-2">
-                  {idea.clicks.toLocaleString()} VIEWS
+                  {(idea.clicks || 0).toLocaleString()} VIEWS
                 </div>
                 <div className="text-sm font-mono text-gray-600">{new Date(idea.sourceDate).toLocaleDateString()}</div>
               </div>

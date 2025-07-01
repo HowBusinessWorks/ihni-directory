@@ -1,4 +1,4 @@
-import { redirect } from 'next/navigation'
+import { redirect, notFound } from 'next/navigation'
 import { getIdeaById } from '@/lib/ideas'
 import { createIdeaPath } from '@/lib/seo-utils'
 
@@ -13,8 +13,8 @@ export default async function OldIdeaPage({ params, searchParams }: OldIdeaPageP
     const idea = await getIdeaById(params.id)
     
     if (!idea) {
-      // If idea doesn't exist, redirect to home
-      redirect('/?scrollToResults=true')
+      // If idea doesn't exist, show 404 page
+      notFound()
     }
     
     // Create the new URL path
@@ -28,6 +28,6 @@ export default async function OldIdeaPage({ params, searchParams }: OldIdeaPageP
     redirect(redirectUrl)
   } catch (error) {
     console.error('Error in old idea page redirect:', error)
-    redirect('/?scrollToResults=true')
+    notFound()
   }
 }

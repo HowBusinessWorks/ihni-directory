@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next'
 import { supabase } from '@/lib/supabase'
 import { categories, businessTypes } from '@/lib/constants'
+import { createIdeaPath, createSlug } from '@/lib/seo-utils'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://ihavenoidea.ai'
@@ -40,9 +41,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .select('id, title, updated_at, category, type, sourceName')
       .order('updated_at', { ascending: false })
 
-    // Generate idea pages
+    // Generate idea pages using the correct URL structure
     const ideaPages: MetadataRoute.Sitemap = ideas?.map(idea => ({
-      url: `${baseUrl}/idea/${idea.id}`,
+      url: `${baseUrl}${createIdeaPath(idea)}`,
       lastModified: new Date(idea.updated_at || new Date()),
       changeFrequency: 'weekly' as const,
       priority: 0.7,
@@ -52,7 +53,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const categoryPages: MetadataRoute.Sitemap = categories
       .filter(cat => cat !== 'All')
       .map(category => ({
-        url: `${baseUrl}/category/${category.toLowerCase().replace(/\s+/g, '-').replace(/&/g, 'and')}`,
+        url: `${baseUrl}/category/${createSlug(category)}`,
         lastModified: new Date(),
         changeFrequency: 'weekly' as const,
         priority: 0.6,
@@ -62,7 +63,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const typePages: MetadataRoute.Sitemap = businessTypes
       .filter(type => type !== 'All')
       .map(type => ({
-        url: `${baseUrl}/type/${type.toLowerCase().replace(/\s+/g, '-')}`,
+        url: `${baseUrl}/type/${createSlug(type)}`,
         lastModified: new Date(),
         changeFrequency: 'weekly' as const,
         priority: 0.6,
@@ -71,7 +72,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Generate creator pages
     const uniqueCreators = [...new Set(ideas?.map(idea => idea.sourceName) || [])]
     const creatorPages: MetadataRoute.Sitemap = uniqueCreators.map(creator => ({
-      url: `${baseUrl}/creator/${creator.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '')}`,
+      url: `${baseUrl}/creator/${createSlug(creator)}`,
       lastModified: new Date(),
       changeFrequency: 'monthly' as const,
       priority: 0.5,

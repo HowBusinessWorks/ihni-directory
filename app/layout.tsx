@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import { CookieConsent } from '@/components/cookie-consent'
+import { Analytics } from '@vercel/analytics/next'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -31,6 +32,7 @@ export default function RootLayout({
       <body>
         {children}
         <CookieConsent />
+        <Analytics />
       </body>
     </html>
   )
